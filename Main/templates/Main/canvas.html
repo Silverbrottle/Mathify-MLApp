@@ -1,0 +1,157 @@
+{% extends 'Main/base.html' %} {% block content %}
+<script type="text/javascript">
+  var canvas,
+    ctx,
+    flag = false,
+    prevX = 0,
+    currX = 0,
+    prevY = 0,
+    currY = 0,
+    dot_flag = false;
+
+  var x = 'black',
+    y = 2;
+
+  function init() {
+    canvas = document.getElementById('can');
+    ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    w = canvas.width;
+    h = canvas.height;
+    canvas.addEventListener(
+      'mousemove',
+      function (e) {
+        findxy('move', e);
+      },
+      false
+    );
+    canvas.addEventListener(
+      'mousedown',
+      function (e) {
+        findxy('down', e);
+      },
+      false
+    );
+    canvas.addEventListener(
+      'mouseup',
+      function (e) {
+        findxy('up', e);
+      },
+      false
+    );
+    canvas.addEventListener(
+      'mouseout',
+      function (e) {
+        findxy('out', e);
+      },
+      false
+    );
+  }
+
+  function draw() {
+    ctx.beginPath();
+    ctx.moveTo(prevX, prevY);
+    ctx.lineTo(currX, currY);
+    ctx.strokeStyle = x;
+    ctx.lineWidth = y;
+    ctx.stroke();
+    ctx.closePath();
+  }
+
+  function save() {
+    const myCanvas = document.querySelector('#can');
+    const dataURL = myCanvas.toDataURL('image/png');
+    if (window.navigator.msSaveBlob) {
+      window.navigator.msSaveBlob(myCanvas.msToBlob(), 'test.png');
+      alert('DONE');
+    } else {
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.href = myCanvas.toDataURL();
+      a.download = 'test.png';
+      a.click();
+      alert('DONE');
+      document.body.removeChild();
+    }
+  }
+
+  function erase() {
+    var m = confirm('Confirm clear');
+    if (m) {
+      ctx.clearRect(0, 0, w, h);
+    }
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function findxy(res, e) {
+    if (res == 'down') {
+      prevX = currX;
+      prevY = currY;
+      currX = e.clientX - canvas.offsetLeft;
+      currY = e.clientY - canvas.offsetTop;
+
+      flag = true;
+      dot_flag = true;
+      if (dot_flag) {
+        ctx.beginPath();
+        ctx.fillStyle = x;
+        ctx.fillRect(currX, currY, 2, 2);
+        ctx.closePath();
+        dot_flag = false;
+      }
+    }
+    if (res == 'up' || res == 'out') {
+      flag = false;
+    }
+    if (res == 'move') {
+      if (flag) {
+        prevX = currX;
+        prevY = currY;
+        currX = e.clientX - canvas.offsetLeft;
+        currY = e.clientY - canvas.offsetTop;
+        draw();
+      }
+    }
+  }
+</script>
+<body onload="init()">
+  <br />
+  <div class="container text-white bg-dark rounded">
+    <br />
+    <p class="display-4 font-weight-bold">Steps for processing:</p>
+    <ol>
+      <li>Write you input in the canvas given below.</li>
+      <li>Click on the <b>Save</b> button.</li>
+      <li>Click on the <b>Submit</b> button</li>
+    </ol>
+    <br />
+  </div>
+  <br />
+  <div class="container text-white rounded bg-dark">
+    <br />
+    <h3>Canvas</h3>
+    <canvas
+      id="can"
+      width="1075"
+      height="300"
+      style="border: 2px solid;"
+    ></canvas>
+    <div class="container">
+      <center>
+        <button type="button" class="btn btn-secondary" onclick="erase()">
+          Clear
+        </button>
+        <button type="button" class="btn btn-primary" onclick="save()">
+          Save
+        </button>
+        <a class="btn btn-success" href="{% url 'output' %}">
+          Submit
+        </a>
+      </center>
+    </div>
+    <br />
+  </div>
+</body>
+{% endblock content%}

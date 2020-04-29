@@ -1,0 +1,56 @@
+{% extends 'Main/base.html' %}{% load static %}{% block content %}
+<br />
+<div class="container text-white bg-success rounded">
+  <br />
+  <h1>Output</h1>
+  <div class="container rounded bg-dark text-white">
+    <center>
+      <br />
+      {% for c in content %}
+      <h2 class="font-weight-bold">{{c}}</h2>
+      {% if 'Arithmetic Expression' in c %}
+      <p>
+        An arithmetic expression is a syntactically correct combination of
+        numbers, operators, parenthesis, and variables.
+      </p>
+      <iframe
+        width="800"
+        height="452"
+        src="https://www.youtube.com/embed/o_4MV5Tz7r4"
+        frameborder="10"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+      {% endif %} {% if 'Linear Equation' in c %}
+      <p>
+        In mathematics, a linear equation is an equation that may be put in the
+        form<br />
+        <i>a<sub>1</sub>x<sub>1</sub>+.....+a<sub>n</sub>x<sub>n</sub>+b=0</i
+        ><br />
+        where x<sub>1</sub> , … , x<sub>n</sub> are the variables (or unknowns),
+        and b , a<sub>1</sub> , … , a<sub>n</sub> are the coefficients, which
+        are often real numbers. The coefficients may be considered as parameters
+        of the equation, and may be arbitrary expressions, provided they do not
+        contain any of the variables. To yield a meaningful equation, the
+        coefficients a<sub>1</sub> , … , a<sub>n</sub> are required to not all
+        be zero.
+      </p>
+      <iframe
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/SDzy5eZpKVU"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+      {% endif %} {% endfor %}
+      <br />
+    </center>
+  </div>
+  <br />
+  <button type="button" class="btn btn-primary btn-lg btn-block">
+    <a href="{% url 'canvas' %}">Back to Canvas</a>
+  </button>
+  <br />
+</div>
+{% endblock content %}
